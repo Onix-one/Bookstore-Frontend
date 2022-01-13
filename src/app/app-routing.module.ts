@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './shared/pages/login/login.component';
-import { RegistrationComponent } from './shared/pages/registration/registration.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'register',
+    path: 'registration',
     component: RegistrationComponent,
   },
 ];
