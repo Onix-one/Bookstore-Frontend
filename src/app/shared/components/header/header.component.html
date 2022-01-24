@@ -1,11 +1,65 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button>
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>BOOK STORE</span>
-  <span class="spacer"></span>
+<mat-toolbar color="primary" class="pe-0 row col-12">
+
+
+  <div class="col-2">
+    <span>BOOK STORE</span>
+  </div>
+  <div class="col-10 pe-0">
+
+    <div class="row col-12">
+      <div class="col-3">
+        <h4> <b>666-11-22</b> MTC, A1, Life;)</h4>
+      </div>
+      <div class="col-6">
+
+      </div>
+      <div class="col-3 pe-0">
+        <div class="row float-end">
+          <button mat-button class="col-1" routerLink="/">Help</button>
+          <button mat-button class="col-4" routerLink="/">Contacts</button>
+          <button mat-button class="col-3" routerLink="/">Info</button>
+        </div>
+      </div>
+    </div>
+    <div class="row col-12 ">
+      <div class="col-9">
+        <div class="input-group ">
+          <input type="text" class="form-control">
+          <span class="input-group-text">
+            <mat-icon>search</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div class="col-3 pe-0">
+        <div class="row justify-content-center pt-1 ">
+          <button mat-button class="col-3" routerLink="login">
+            <h1>Login</h1>
+          </button>
+          <button mat-button class="col-4" routerLink="books">
+            <h1>Favorite</h1>
+          </button>
+          <button mat-button class="col-3" color="warn" routerLink="/">
+            <h1>Cart</h1>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+  <!-- 
   <button mat-button routerLink="/login">
     <mat-icon>account_circle</mat-icon>
     SIGN IN
-  </button>
+  </button> -->
 </mat-toolbar>
