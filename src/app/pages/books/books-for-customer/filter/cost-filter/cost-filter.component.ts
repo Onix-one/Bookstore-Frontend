@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cost-filter',
@@ -11,5 +12,5 @@ export class CostFilterComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  emailFormControl = new FormControl();
 }

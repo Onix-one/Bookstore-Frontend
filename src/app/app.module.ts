@@ -11,12 +11,16 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { HomeModule } from './pages/home/home.module';
 import { BooksComponent } from './pages/books/books.component';
-import { FilterComponent } from './pages/books/filter/filter.component';
-import { AuthorFilterComponent } from './pages/books/filter/author-filter/author-filter.component';
-import { GenreFilterComponent } from './pages/books/filter/genre-filter/genre-filter.component';
-import { YearFilterComponent } from './pages/books/filter/year-filter/year-filter.component';
-import { RatingFilterComponent } from './pages/books/filter/rating-filter/rating-filter.component';
-import { CostFilterComponent } from './pages/books/filter/cost-filter/cost-filter.component';
+
+import { BooksForManagerComponent } from './pages/books/books-for-manager/books-for-manager.component';
+import { BooksForCustomerComponent } from './pages/books/books-for-customer/books-for-customer.component';
+import { CostFilterComponent } from './pages/books/books-for-customer/filter/cost-filter/cost-filter.component';
+import { RatingFilterComponent } from './pages/books/books-for-customer/filter/rating-filter/rating-filter.component';
+import { YearFilterComponent } from './pages/books/books-for-customer/filter/year-filter/year-filter.component';
+import { GenreFilterComponent } from './pages/books/books-for-customer/filter/genre-filter/genre-filter.component';
+import { AuthorFilterComponent } from './pages/books/books-for-customer/filter/author-filter/author-filter.component';
+import { FilterComponent } from './pages/books/books-for-customer/filter/filter.component';
+import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edit-book.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,9 @@ import { CostFilterComponent } from './pages/books/filter/cost-filter/cost-filte
     YearFilterComponent,
     RatingFilterComponent,
     CostFilterComponent,
+    BooksForManagerComponent,
+    BooksForCustomerComponent,
+    EditBookComponent,
   ],
   imports: [
     BrowserModule,
