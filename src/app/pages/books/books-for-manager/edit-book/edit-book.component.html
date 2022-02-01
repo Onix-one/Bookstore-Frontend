@@ -1,46 +1,83 @@
 <div>
-    <mat-card>
-      <mat-card-title>
-        <h2>
-          Create book
-        </h2>
-      </mat-card-title>
-      <mat-card-content>
-        <form [formGroup]="createBook" name="createBook" (ngSubmit)="submit()">
-          <div class=book-name>
-            <mat-form-field appearance="outline">
-              <input type="text" matInput required maxlength="100" minlength="1" placeholder="book name" formControlName="bookName">
-            </mat-form-field>
-            <mat-error *ngIf="!createBook.controls['bookName'].valid && createBook.controls['bookName'].dirty">
-              Bookname is required
-            </mat-error>
-            </div>
-          <div class="description-input">
-            <mat-form-field appearance="outline">
-              <input type="text" required matInput minlength="50" placeholder="add book description"  formControlName="description">
-            </mat-form-field>
-            <mat-error *ngIf="!createBook.controls['description'].valid && createBook.controls['description'].dirty">
-              Description is required
-            </mat-error>
-          </div>
-            <div>
-                <mat-form-field appearance="outline" >
-                  <mat-select [formControl]="websiteMultiCtrl" placeholder="Website" [multiple]="true"  #multiSelect>
-                    <mat-option>
-                      <ngx-mat-select-search [formControl]="websiteMultiFilterCtrl"></ngx-mat-select-search>
-                    </mat-option>
-                    <mat-option *ngFor="let website of filteredWebsitesMulti | async" [value]="website">
-                      {{website.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            </div> 
-            <div>
-              <button type="submit" mat-flat-button color="primary" [disabled]="createBook.invalid">
-                <mat-icon>lock_open</mat-icon> REGISTER
-              </button>
-            </div>   
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <mat-card>
+    <mat-card-title>
+      <h2>
+        Create book
+      </h2>
+    </mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="createBook" name="createBook" (ngSubmit)="submit()">
+        <div class=book-name>
+          <mat-form-field appearance="outline">
+            <input type="text" matInput required maxlength="100" minlength="1" placeholder="book name"
+              formControlName="name">
+          </mat-form-field>
+          <mat-error *ngIf="!createBook.controls['name'].valid && createBook.controls['name'].dirty">
+            Bookname is required
+          </mat-error>
+        </div>
+        <div class=book-price>
+          <mat-form-field appearance="outline">
+            <input type="number" matInput required placeholder="book price" formControlName="price">
+          </mat-form-field>
+          <mat-error *ngIf="!createBook.controls['price'].valid && createBook.controls['price'].dirty">
+            Book price is required
+          </mat-error>
+          <mat-error *ngIf="createBook.controls['price'].value < 0">
+            Book price must be more than zero
+          </mat-error>
+        </div>
+        <div class="book-description">
+          <mat-form-field appearance="outline">
+            <input type="text" required matInput minlength="50" placeholder="add book description"
+              formControlName="description">
+          </mat-form-field>
+          <mat-error *ngIf="!createBook.controls['description'].valid && createBook.controls['description'].dirty">
+            Description is required
+          </mat-error>
+        </div>
+        <div class="book-image pb-3">
+          <input type="file" required formControlName="imageFiles">
+        </div>
+        <div class="book-book pb-3">
+          <input type="file" required formControlName="book">
+        </div>
+        <div class="book-genres">
+          <mat-form-field appearance="outline">
+            <mat-label>Genres</mat-label>
+            <mat-chip-list #chipList aria-label="Genres selection">
+              <mat-chip
+                *ngFor="let fruit of fruits"
+                (removed)="remove(fruit)">
+                {{fruit}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input
+                placeholder="New fruit..."
+                #fruitInput
+                [formControl]="fruitCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+                {{fruit}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+
+        <div>
+          <button type="submit" mat-flat-button color="primary" [disabled]="createBook.invalid">
+            <mat-icon>lock_open</mat-icon> ADD BOOK
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,130 +1,89 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatSelect } from '@angular/material/select';
-import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Api } from 'src/app/generated/bookStore-api';
+import { ApiService } from 'src/app/shared/services/api.service';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { Observable } from 'rxjs';
+import { MatChipInputEvent } from '@angular/material/chips';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {map, startWith} from 'rxjs/operators';
 
-interface Website {
-  id: string;
-  name: string;
-}
 @Component({
   selector: 'app-edit-book',
   templateUrl: './edit-book.component.html',
   styleUrls: ['./edit-book.component.css']
 })
+
 export class EditBookComponent implements OnInit {
   createBook!: FormGroup;
-
-  title = 'app-material3';
-    
-  protected websites:any  =  [
-    {id: '1', name: 'ItSolutionStuff.com'},
-    {id: '2', name: 'HDTuto.com'},
-    {id: '3', name: 'Nicesnippets.com'},
-    {id: '4', name: 'Google.com'},
-    {id: '5', name: 'laravel.com'},
-    {id: '6', name: 'npmjs.com'},
-    {id: '7', name: 'Google2.com'},
-  ]; 
+  api?:Api<unknown>;
   
-  public websiteMultiCtrl: FormControl = new FormControl();
-  public websiteMultiFilterCtrl: FormControl = new FormControl();
-  public filteredWebsitesMulti: ReplaySubject<any> = new ReplaySubject<any>(1);
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  fruitCtrl = new FormControl();
+  filteredFruits: Observable<string[]>;
+  fruits: string[] = ['Lemon'];
+  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
 
-  
-  @ViewChild('multiSelect', { static: true }) multiSelect?: MatSelect;
-  
-  protected _onDestroy = new Subject();
+  @ViewChild('fruitInput') fruitInput?: ElementRef<HTMLInputElement>;
 
-  constructor() { }
+  constructor(private apiService: ApiService) {
+    this.api = apiService.GetApi();
+    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
+    );
+  }
 
-  
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
 
-  hide: boolean = false;
+    // Add our fruit
+    if (value) {
+      this.fruits.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.fruitCtrl.setValue(null);
+  }
+
+  remove(fruit: string): void {
+    const index = this.fruits.indexOf(fruit);
+
+    if (index >= 0) {
+      this.fruits.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.fruits.push(event.option.viewValue);
+    if( this.fruitInput!=null){
+      this.fruitInput.nativeElement.value = '';
+    }
+    this.fruitCtrl.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
+  }
 
   ngOnInit(): void {
     this.createBook = new FormGroup({
-      bookName: new FormControl(''),
-      description : new FormControl('')
-    });
-
-      this.websiteMultiCtrl.setValue(this.websites[1]);
-      this.filteredWebsitesMulti.next(this.websites.slice());
-    
-      this.websiteMultiFilterCtrl.valueChanges
-        .pipe(takeUntil(this._onDestroy))
-        .subscribe(() => {
-          this.filterWebsiteMulti();
-        });
+      name: new FormControl(''),
+      price : new FormControl(''),
+      description : new FormControl(''),
+      imageFiles : new FormControl(''),
+      book : new FormControl(''),
+      genresOfBookId : new FormControl(''),
+      authorsId : new FormControl('')
+    });  
   }
 
-  addAuthor(){}
-   /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-    ngAfterViewInit() {
-      this.setInitialValue();
-    }
-   
-    /**
-     * Write code on Method
-     *
-     * method logical code
-     */
-    ngOnDestroy() {
-      // this._onDestroy.next();
-      this._onDestroy.complete();
-    }
-    
-    /**
-     * Write code on Method
-     *
-     * method logical code
-     */
-    protected setInitialValue() {
-      this.filteredWebsitesMulti
-        .pipe(take(1), takeUntil(this._onDestroy))
-        .subscribe(() => {
-          if (this.multiSelect != null) {
-            this.multiSelect.compareWith = (a: Website, b: Website) => a && b && a.id === b.id;
-          }
-           
-        });
-    }
-    
-    /**
-     * Write code on Method
-     *
-     * method logical code
-     */
-    protected filterWebsiteMulti() {
-      if (!this.websites) {
-        return;
-      }
-    
-      let search = this.websiteMultiFilterCtrl.value;
-      if (!search) {
-        this.filteredWebsitesMulti.next(this.websites.slice());
-        return;
-      } else {
-        search = search.toLowerCase();
-      }
-    
-      this.filteredWebsitesMulti.next(
-        this.websites.filter((bank: { name: string; }) => bank.name.toLowerCase().indexOf(search) > -1)
-      );
-    }
-
   submit() {
-    if (this.createBook.valid) {
-      console.log(this.createBook.value);
 
-      // this.client
-      //   .registerUser(this.registrationUser.value)
-      //   .then((err) => console.log(err));
-    }
   }
 }

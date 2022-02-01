@@ -28,7 +28,6 @@ export class FormAddAuthorComponent implements OnInit {
     })
   }
   submit(form:CreateNewAuthorModel) {
-
-
+    this.api?.api.authorCreateAuthorCreate(form);
   }
 }
