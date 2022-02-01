@@ -21,6 +21,12 @@ import { GenreFilterComponent } from './pages/books/books-for-customer/filter/ge
 import { AuthorFilterComponent } from './pages/books/books-for-customer/filter/author-filter/author-filter.component';
 import { FilterComponent } from './pages/books/books-for-customer/filter/filter.component';
 import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edit-book.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { Api } from './generated/bookStore-api';
+import { ApiService } from './shared/services/api.service';
+
+
+
 
 @NgModule({
   declarations: [
@@ -47,8 +53,9 @@ import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edi
     ReactiveFormsModule,
     MaterialsModule,
     HomeModule,
+    NgxMatSelectSearchModule
   ],
-  providers: [],
+  providers: [Api,ApiService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

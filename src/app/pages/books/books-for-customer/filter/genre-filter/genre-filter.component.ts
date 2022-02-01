@@ -21,6 +21,11 @@ export class GenreFilterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  filter(){
+    debugger
+    return this.toppings1
+  }
+
 
 genreList = ["Classic literature","Children's literature", "Bisness literature"]
 

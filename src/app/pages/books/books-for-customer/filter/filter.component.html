@@ -1,4 +1,15 @@
-<app-genre-filter></app-genre-filter>
-<app-author-filter></app-author-filter>
-<app-cost-filter></app-cost-filter>
-<app-rating-filter></app-rating-filter>
+
+<div>
+    <div>
+        <app-genre-filter></app-genre-filter>
+        <app-author-filter></app-author-filter>
+        <app-cost-filter></app-cost-filter>
+        <app-rating-filter></app-rating-filter>
+    </div>
+    <div >
+        <button (click)="launchFilter()"type="launchFilter()" mat-raised-button color="primary" >
+            <h1 class="mb-0">Find book</h1>
+        </button>
+    </div>
+</div>
+
