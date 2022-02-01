@@ -24,6 +24,10 @@ import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edi
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { Api } from './generated/bookStore-api';
 import { ApiService } from './shared/services/api.service';
+import { GenresComponent } from './pages/genres/genres.component';
+import { FormAddGenreComponent } from './pages/genres/form-add-genre/form-add-genre.component';
+import { AuthorsComponent } from './pages/authors/authors.component';
+import { FormAddAuthorComponent } from './pages/authors/form-add-author/form-add-author.component';
 
 
 
@@ -44,6 +48,10 @@ import { ApiService } from './shared/services/api.service';
     BooksForManagerComponent,
     BooksForCustomerComponent,
     EditBookComponent,
+    GenresComponent,
+    FormAddGenreComponent,
+    AuthorsComponent,
+    FormAddAuthorComponent,
   ],
   imports: [
     BrowserModule,

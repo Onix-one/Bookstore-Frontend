@@ -1,0 +1,66 @@
+<div>
+    <mat-card>
+        <mat-card-title>
+            <h2>
+                Create genre
+            </h2>
+        </mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="createAuthor" name="createBook" (ngSubmit)="submit(createAuthor.value)">
+                <div class=author-firstname>
+                    <mat-form-field appearance="outline">
+                        <input type="text" matInput required maxlength="25" minlength="1"
+                            placeholder="author first name" formControlName="firstName">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="!createAuthor.controls['firstName'].valid && createAuthor.controls['firstName'].dirty">
+                        First name is required
+                    </mat-error>
+                </div>
+                <div class=author-secondname>
+                    <mat-form-field appearance="outline">
+                        <input type="text" matInput required maxlength="35" minlength="1"
+                            placeholder="author second name" formControlName="secondName">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="!createAuthor.controls['secondName'].valid && createAuthor.controls['secondName'].dirty">
+                        Second name is required
+                    </mat-error>
+                </div>
+                <div class=author-dateOfBirth>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Choose date of birth</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                </div>
+                <div class=author-biografy>
+                    <mat-form-field appearance="outline">
+                        <input type="text" matInput required 
+                            placeholder="author biografy" formControlName="biografy">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="!createAuthor.controls['biografy'].valid && createAuthor.controls['biografy'].dirty">
+                        Biografy is required
+                    </mat-error>
+                </div>
+                <div class="author-nationality">
+                    <mat-form-field appearance="outline">
+                        <input type="text" required matInput  placeholder="author nationality"
+                            formControlName="nationality">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="!createAuthor.controls['nationality'].valid && createAuthor.controls['nationality'].dirty">
+                        Nationality is required
+                    </mat-error>
+                </div>
+                <div>
+                    <button type="submit" mat-flat-button color="primary" [disabled]="createAuthor.invalid">
+                        <mat-icon>lock_open</mat-icon> ADD AUTHOR
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
