@@ -21,7 +21,7 @@ import { GenreFilterComponent } from './pages/books/books-for-customer/filter/ge
 import { AuthorFilterComponent } from './pages/books/books-for-customer/filter/author-filter/author-filter.component';
 import { FilterComponent } from './pages/books/books-for-customer/filter/filter.component';
 import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edit-book.component';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+/* import { NgxMatSelectSearchModule } from 'ngx-mat-select-search'; */
 import { Api } from './generated/bookStore-api';
 import { ApiService } from './shared/services/api.service';
 import { GenresComponent } from './pages/genres/genres.component';
@@ -60,8 +60,8 @@ import { FormAddAuthorComponent } from './pages/authors/form-add-author/form-add
     FormsModule,
     ReactiveFormsModule,
     MaterialsModule,
-    HomeModule,
-    NgxMatSelectSearchModule
+    HomeModule/* ,
+    NgxMatSelectSearchModule */
   ],
   providers: [Api,ApiService],
   bootstrap: [AppComponent],

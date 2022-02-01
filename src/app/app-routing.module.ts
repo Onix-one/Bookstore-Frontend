@@ -6,6 +6,8 @@ import { BooksComponent } from './pages/books/books.component';
 import { FormAddGenreComponent } from './pages/genres/form-add-genre/form-add-genre.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { AuthorsComponent } from './pages/authors/authors.component';
+import { GenresComponent } from './pages/genres/genres.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,14 @@ const routes: Routes = [
   {
     path: 'books',
     component: BooksComponent,
+  },
+  {
+    path: 'authors',
+    component: AuthorsComponent,
+  },
+  {
+    path: 'genres',
+    component: GenresComponent,
   },
   {
     path: 'edit-book',

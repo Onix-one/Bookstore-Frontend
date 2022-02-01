@@ -30,7 +30,7 @@
                 <div class=author-dateOfBirth>
                     <mat-form-field appearance="outline">
                         <mat-label>Choose date of birth</mat-label>
-                        <input matInput [matDatepicker]="picker">
+                        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>

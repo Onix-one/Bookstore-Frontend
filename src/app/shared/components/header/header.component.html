@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="pe-0 row col-12">
 
   <div class="col-1">
-    <button mat-mini-fab color="primary" (click) = "drawerToggle()">
+    <button mat-mini-fab color="primary" (click)="drawerToggle()">
       <mat-icon>menu</mat-icon>
     </button>
   </div>
@@ -15,7 +15,29 @@
         <h4> <b>666-11-22</b> MTC, A1, Life;)</h4>
       </div>
       <div class="col-6">
-
+        <div class="row">
+          <div class="col-2">
+            <button mat-button [matMenuTriggerFor]="books">Books</button>
+            <mat-menu #books="matMenu">
+              <button mat-menu-item routerLink="/books">All book</button>
+              <button mat-menu-item routerLink="/edit-book">Add book</button>
+            </mat-menu>
+          </div>
+          <div class="col-2">
+            <button mat-button [matMenuTriggerFor]="authors">Authors</button>
+            <mat-menu #authors="matMenu">
+              <button mat-menu-item routerLink="/authors">All authors</button>
+              <button mat-menu-item routerLink="/edit-author">Add author</button>
+            </mat-menu>
+          </div>
+          <div class="col-2">
+            <button mat-button [matMenuTriggerFor]="genres">Genres</button>
+            <mat-menu #genres="matMenu">
+              <button mat-menu-item routerLink="/genres">All genres</button>
+              <button mat-menu-item routerLink="/edit-genre">Add genre</button>
+            </mat-menu>
+          </div>
+        </div>
       </div>
       <div class="col-3 pe-0">
         <div class="row float-end">
