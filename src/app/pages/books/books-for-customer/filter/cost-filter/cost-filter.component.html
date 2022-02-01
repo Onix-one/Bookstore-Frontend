@@ -4,9 +4,8 @@
         <div class="col-5 ps-3">
             <mat-label>Min</mat-label>
             <form class="example-form">
-                <mat-form-field appearance="outline">
-                
-                    <input class="input-font-size" type="text" matInput  placeholder="0.00">
+                <mat-form-field appearance="outline">               
+                    <input type="number" class="input-font-size"  matInput (change)="changeMinCost($event)" placeholder="{{minCost}}">
                 </mat-form-field>
             </form>
         </div>
@@ -14,7 +13,7 @@
             <mat-label>Max</mat-label>
             <form class="example-form">
                 <mat-form-field appearance="outline">
-                    <input class="input-font-size" type="text" matInput placeholder="0.00">
+                    <input type="number" class="input-font-size"  matInput (change)="changeMaxCost($event)" placeholder="{{maxCost}}">
                 </mat-form-field>
             </form>
         </div>
