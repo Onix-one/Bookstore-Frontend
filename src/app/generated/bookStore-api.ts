@@ -20,7 +20,6 @@ export interface Author {
   biografy?: string | null;
   nationality?: string | null;
   books?: Book[] | null;
-  genreOfBooks?: GenreOfBook[] | null;
 }
 
 export interface AuthorDTO {
@@ -34,7 +33,6 @@ export interface AuthorDTO {
   biografy?: string | null;
   nationality?: string | null;
   books?: BookDTO[] | null;
-  genresOfBook?: GenreOfBookDTO[] | null;
 }
 
 export interface AuthorNamesAndIdInfo {
@@ -198,17 +196,16 @@ export interface FilterForBookModel {
 export interface GenreOfBook {
   /** @format int32 */
   id?: number;
-  genre?: string | null;
+  name?: string | null;
   description?: string | null;
   books?: Book[] | null;
   fansOfGenres?: Customer[] | null;
-  authors?: Author[] | null;
 }
 
 export interface GenreOfBookDTO {
   /** @format int32 */
   id?: number;
-  type?: string | null;
+  name?: string | null;
   description?: string | null;
 }
 
@@ -222,7 +219,7 @@ export interface GenreOfBookForAuthorFiltr {
 export interface GetAllGenreModel {
   /** @format int32 */
   id?: number;
-  genre?: string | null;
+  name?: string | null;
   description?: string | null;
 }
 
@@ -452,13 +449,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Author
-     * @name AuthorCreateCreate
-     * @request POST:/api/Author/Create
+     * @name AuthorCreateAuthorCreate
+     * @request POST:/api/Author/CreateAuthor
      * @secure
      */
-    authorCreateCreate: (data: CreateNewAuthorModel, params: RequestParams = {}) =>
+    authorCreateAuthorCreate: (data: CreateNewAuthorModel, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/Author/Create`,
+        path: `/api/Author/CreateAuthor`,
         method: "POST",
         body: data,
         secure: true,
@@ -470,13 +467,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Author
-     * @name AuthorEditCreate
-     * @request POST:/api/Author/Edit
+     * @name AuthorEditAuthorCreate
+     * @request POST:/api/Author/EditAuthor
      * @secure
      */
-    authorEditCreate: (data: AuthorDTO, params: RequestParams = {}) =>
+    authorEditAuthorCreate: (data: AuthorDTO, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/Author/Edit`,
+        path: `/api/Author/EditAuthor`,
         method: "POST",
         body: data,
         secure: true,
@@ -488,13 +485,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Author
-     * @name AuthorDeleteDelete
-     * @request DELETE:/api/Author/Delete
+     * @name AuthorDeleteAuthorDelete
+     * @request DELETE:/api/Author/DeleteAuthor
      * @secure
      */
-    authorDeleteDelete: (query?: { authorId?: number }, params: RequestParams = {}) =>
+    authorDeleteAuthorDelete: (query?: { authorId?: number }, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/Author/Delete`,
+        path: `/api/Author/DeleteAuthor`,
         method: "DELETE",
         query: query,
         secure: true,
@@ -505,13 +502,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Author
-     * @name AuthorGetAllList
-     * @request GET:/api/Author/GetAll
+     * @name AuthorGetAllAuthorsList
+     * @request GET:/api/Author/GetAllAuthors
      * @secure
      */
-    authorGetAllList: (params: RequestParams = {}) =>
+    authorGetAllAuthorsList: (params: RequestParams = {}) =>
       this.request<AuthorDTO, any>({
-        path: `/api/Author/GetAll`,
+        path: `/api/Author/GetAllAuthors`,
         method: "GET",
         secure: true,
         format: "json",
