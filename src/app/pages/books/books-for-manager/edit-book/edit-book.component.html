@@ -9,6 +9,7 @@
       <form [formGroup]="createBook" name="createBook" (ngSubmit)="submit()">
         <div class=book-name>
           <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
             <input type="text" matInput required maxlength="100" minlength="1" placeholder="book name"
               formControlName="name">
           </mat-form-field>
@@ -18,6 +19,7 @@
         </div>
         <div class=book-price>
           <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
             <input type="number" matInput required placeholder="book price" formControlName="price">
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['price'].valid && createBook.controls['price'].dirty">
@@ -29,8 +31,9 @@
         </div>
         <div class="book-description">
           <mat-form-field appearance="outline">
-            <input type="text" required matInput minlength="50" placeholder="add book description"
-              formControlName="description">
+            <mat-label>Description</mat-label>
+              <textarea matInput required minlength="50" placeholder="Book description"
+              formControlName="description"></textarea>
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['description'].valid && createBook.controls['description'].dirty">
             Description is required
@@ -72,9 +75,9 @@
         </div>
 
 
-        <div>
+        <div class="d-flex justify-content-center">
           <button type="submit" mat-flat-button color="primary" [disabled]="createBook.invalid">
-            <mat-icon>lock_open</mat-icon> ADD BOOK
+            <mat-icon>add_circle</mat-icon> ADD BOOK
           </button>
         </div>
       </form>

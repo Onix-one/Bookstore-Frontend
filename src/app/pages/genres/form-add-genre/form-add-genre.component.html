@@ -7,25 +7,27 @@
       </mat-card-title>
       <mat-card-content>
         <form [formGroup]="createGenre" name="createBook" (ngSubmit)="submit(createGenre.value)">
-          <div class=book-name>
+          <div class=genre-name>
             <mat-form-field appearance="outline">
-              <input type="text" matInput required maxlength="100" minlength="1" placeholder="book name" formControlName="genreName">
+                <mat-label>Genre name</mat-label>
+              <input type="text" matInput required maxlength="100" minlength="1" placeholder="genre-name" formControlName="genreName">
             </mat-form-field>
             <mat-error *ngIf="!createGenre.controls['genreName'].valid && createGenre.controls['genreName'].dirty">
               Genrename is required
             </mat-error>
             </div>
-          <div class="description-input">
+          <div class="genre-description">
             <mat-form-field appearance="outline">
-              <input type="text" required matInput minlength="50" placeholder="add book description"  formControlName="description">
+                <mat-label>Description</mat-label>
+                <textarea matInput required minlength="50" placeholder="add book description" formControlName="description"></textarea>
             </mat-form-field>
             <mat-error *ngIf="!createGenre.controls['description'].valid && createGenre.controls['description'].dirty">
               Description is required
             </mat-error>
           </div>
-            <div>
+            <div class="d-flex justify-content-center">
               <button type="submit" mat-flat-button color="primary" [disabled]="createGenre.invalid">
-                <mat-icon>lock_open</mat-icon> ADD GENRE
+                <mat-icon>add_circle</mat-icon> ADD GENRE
               </button>
             </div>   
         </form>

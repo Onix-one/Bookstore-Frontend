@@ -2,13 +2,14 @@
     <mat-card>
         <mat-card-title>
             <h2>
-                Create genre
+                Create author
             </h2>
         </mat-card-title>
         <mat-card-content>
             <form [formGroup]="createAuthor" name="createBook" (ngSubmit)="submit(createAuthor.value)">
                 <div class=author-firstname>
                     <mat-form-field appearance="outline">
+                        <mat-label>First name</mat-label>
                         <input type="text" matInput required maxlength="25" minlength="1"
                             placeholder="author first name" formControlName="firstName">
                     </mat-form-field>
@@ -19,6 +20,7 @@
                 </div>
                 <div class=author-secondname>
                     <mat-form-field appearance="outline">
+                        <mat-label>Second name</mat-label>
                         <input type="text" matInput required maxlength="35" minlength="1"
                             placeholder="author second name" formControlName="secondName">
                     </mat-form-field>
@@ -29,16 +31,21 @@
                 </div>
                 <div class=author-dateOfBirth>
                     <mat-form-field appearance="outline">
-                        <mat-label>Choose date of birth</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                        <mat-label>Date of birth</mat-label>
+                        <input matInput [matDatepicker]="picker" required formControlName="dateOfBirth">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
-                      </mat-form-field>
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="!createAuthor.controls['dateOfBirth'].valid && createAuthor.controls['dateOfBirth'].dirty">
+                        Date of birth is required
+                    </mat-error>
                 </div>
                 <div class=author-biografy>
                     <mat-form-field appearance="outline">
-                        <input type="text" matInput required 
-                            placeholder="author biografy" formControlName="biografy">
+                        <mat-label>Biografy</mat-label>
+                        <textarea matInput required minlength="50" placeholder="author biografy"
+                            formControlName="biografy"></textarea>
                     </mat-form-field>
                     <mat-error
                         *ngIf="!createAuthor.controls['biografy'].valid && createAuthor.controls['biografy'].dirty">
@@ -47,7 +54,8 @@
                 </div>
                 <div class="author-nationality">
                     <mat-form-field appearance="outline">
-                        <input type="text" required matInput  placeholder="author nationality"
+                        <mat-label>Nationality</mat-label>
+                        <input type="text" required matInput placeholder="author nationality"
                             formControlName="nationality">
                     </mat-form-field>
                     <mat-error
@@ -55,9 +63,9 @@
                         Nationality is required
                     </mat-error>
                 </div>
-                <div>
+                <div class="d-flex justify-content-center">
                     <button type="submit" mat-flat-button color="primary" [disabled]="createAuthor.invalid">
-                        <mat-icon>lock_open</mat-icon> ADD AUTHOR
+                        <mat-icon>add_circle</mat-icon> ADD AUTHOR
                     </button>
                 </div>
             </form>
