@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Api } from 'src/app/generated/bookStore-api';
+import { Api, CreateNewBookModel } from 'src/app/generated/bookStore-api';
 import { ApiService } from 'src/app/shared/services/api.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { Observable } from 'rxjs';
@@ -83,7 +83,9 @@ export class EditBookComponent implements OnInit {
     });  
   }
 
-  submit() {
-
+  submit(form:CreateNewBookModel ) {
+    debugger
+    console.log(form);
+  
   }
 }

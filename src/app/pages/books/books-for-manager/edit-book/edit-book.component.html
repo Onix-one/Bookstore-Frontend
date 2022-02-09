@@ -6,7 +6,7 @@
       </h2>
     </mat-card-title>
     <mat-card-content>
-      <form [formGroup]="createBook" name="createBook" (ngSubmit)="submit()">
+      <form [formGroup]="createBook" name="createBook" (ngSubmit)="submit(createBook.value)">
         <div class=book-name>
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
@@ -20,12 +20,12 @@
         <div class=book-price>
           <mat-form-field appearance="outline">
             <mat-label>Price</mat-label>
-            <input type="number" matInput required placeholder="book price" formControlName="price">
+            <input type="number" matInput min="0" required placeholder="book price" formControlName="price">
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['price'].valid && createBook.controls['price'].dirty">
             Book price is required
           </mat-error>
-          <mat-error *ngIf="createBook.controls['price'].value < 0">
+          <mat-error *ngIf="createBook.controls['price'].value < 0 && createBook.controls['price'].valid">
             Book price must be more than zero
           </mat-error>
         </div>
@@ -40,10 +40,10 @@
           </mat-error>
         </div>
         <div class="book-image pb-3">
-          <input type="file" required formControlName="imageFiles">
+          <input type="file" required multiple  requiredFileType="image/png" formControlName="imageFiles">
         </div>
         <div class="book-book pb-3">
-          <input type="file" required formControlName="book">
+          <input type="file" required  formControlName="book">
         </div>
         <div class="book-genres">
           <mat-form-field appearance="outline">
