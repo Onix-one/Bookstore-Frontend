@@ -32,38 +32,44 @@
         <div class="book-description">
           <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
-              <textarea matInput required minlength="50" placeholder="Book description"
+            <textarea matInput required minlength="50" placeholder="Book description"
               formControlName="description"></textarea>
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['description'].valid && createBook.controls['description'].dirty">
             Description is required
           </mat-error>
         </div>
-        <div class="book-image pb-3">
-          <input type="file" required multiple  requiredFileType="image/png" formControlName="imageFiles">
+        <hr>
+        <a mat-button (click)="addImage()">
+          <mat-icon>add_circle_outline</mat-icon>
+          Add image
+        </a>
+
+        <div class="row col-12 book-image pb-3" *ngFor="let imageFile of imageFiles.controls;let i = index">
+          <div class="col-9">
+            <input  type="file" required multiple requiredFileType="image/png" [formArrayName]="i">
+          </div>
+          <div class="col-3">
+            <mat-icon  (click)="removeImage()">remove_circle_outline</mat-icon>
+          </div>
         </div>
+        <hr>
+
         <div class="book-book pb-3">
-          <input type="file" required  formControlName="book">
+          <input type="file" required formControlName="book">
         </div>
         <div class="book-genres">
           <mat-form-field appearance="outline">
             <mat-label>Genres</mat-label>
             <mat-chip-list #chipList aria-label="Genres selection">
-              <mat-chip
-                *ngFor="let fruit of fruits"
-                (removed)="remove(fruit)">
+              <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
                 {{fruit}}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
-              <input
-                placeholder="New fruit..."
-                #fruitInput
-                [formControl]="fruitCtrl"
-                [matAutocomplete]="auto"
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              <input placeholder="New fruit..." #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="add($event)">
             </mat-chip-list>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">

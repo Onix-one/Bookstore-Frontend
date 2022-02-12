@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Api, CreateNewBookModel } from 'src/app/generated/bookStore-api';
 import { ApiService } from 'src/app/shared/services/api.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -17,7 +17,11 @@ import {map, startWith} from 'rxjs/operators';
 
 export class EditBookComponent implements OnInit {
   createBook!: FormGroup;
+  imageFiles! :FormArray;
   api?:Api<unknown>;
+  counter : number = 0;
+  values: number [] = [] ;
+ 
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
@@ -27,8 +31,7 @@ export class EditBookComponent implements OnInit {
 
   @ViewChild('fruitInput') fruitInput?: ElementRef<HTMLInputElement>;
 
-  constructor(private apiService: ApiService) {
-    this.api = apiService.GetApi();
+  constructor() {
     this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
       startWith(null),
       map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
@@ -72,20 +75,27 @@ export class EditBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageFiles = new FormArray([]);
     this.createBook = new FormGroup({
       name: new FormControl(''),
       price : new FormControl(''),
       description : new FormControl(''),
-      imageFiles : new FormControl(''),
       book : new FormControl(''),
       genresOfBookId : new FormControl(''),
       authorsId : new FormControl('')
-    });  
+    }); 
   }
 
   submit(form:CreateNewBookModel ) {
     debugger
     console.log(form);
   
+  }
+  addImage(){
+    this.values.push(this.counter++);
+  }
+  removeImage(){
+    this.values.pop();
+    this.counter--;
   }
 }
