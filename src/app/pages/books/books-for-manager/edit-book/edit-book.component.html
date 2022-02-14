@@ -39,42 +39,71 @@
             Description is required
           </mat-error>
         </div>
-        <hr>
-        <a mat-button (click)="addImage()">
-          <mat-icon>add_circle_outline</mat-icon>
-          Add image
-        </a>
-
-        <div class="row col-12 book-image pb-3" *ngFor="let imageFile of imageFiles.controls;let i = index">
-          <div class="col-9">
-            <input  type="file" required multiple requiredFileType="image/png" [formArrayName]="i">
-          </div>
-          <div class="col-3">
-            <mat-icon  (click)="removeImage()">remove_circle_outline</mat-icon>
+        <div  class="AddImage mb-4">
+          <div class="pt-2 ps-2"> 
+            <h3 class="ml-2 mb-1">Add image</h3>
+          </div>   
+          <a mat-button (click)="addImage()">
+            <mat-icon>add_circle_outline</mat-icon>
+            New image
+          </a>
+          <div class="row col-12 book-image pb-3" formArrayName="imageFiles"
+            *ngFor="let imageFile of imageFiles.controls;let i=index">
+            <div class="col-9">
+              <input type="file" required multiple requiredFileType="image/png" [formControlName]="i">
+            </div>
+            <div class="col-3">
+              <mat-icon (click)="removeImage(i)">remove_circle_outline</mat-icon>
+            </div>
           </div>
         </div>
-        <hr>
-
-        <div class="book-book pb-3">
-          <input type="file" required formControlName="book">
+        <div class="AddBook">
+          <div class="pt-2 ps-2" >
+            <div class="fonk" >Add Book</div>
+          </div> 
+          <div class="book-book pb-3 ps-2">
+            <input class="ml-1" type="file" required formControlName="book">
+          </div>
         </div>
         <div class="book-genres">
           <mat-form-field appearance="outline">
             <mat-label>Genres</mat-label>
-            <mat-chip-list #chipList aria-label="Genres selection">
-              <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                {{fruit}}
+            <mat-chip-list #genreList aria-label="Genres selection">
+              <mat-chip *ngFor="let genre of genres" (removed)="removeGenre(genre)">
+                {{genre}}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
-              <input placeholder="New fruit..." #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
-                [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="add($event)">
+              <input #genreInput placeholder="New genre..." #fruitInput [formControl]="genreCtrl" [matAutocomplete]="auto"
+                [matChipInputFor]="genreList" [matChipInputSeparatorKeyCodes]="separatorKeysCodesGenre"
+                (matChipInputTokenEnd)="addGenre($event)">
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-              <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                {{fruit}}
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedGenre($event)">
+              <mat-option *ngFor="let genre of filteredGenres | async" [value]="genre">
+                {{genre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="book-authors">
+          <mat-form-field appearance="outline">
+            <mat-label>Authors</mat-label>
+            <mat-chip-list #authorList aria-label="Author selection">
+              <mat-chip *ngFor="let author of authors" (removed)="removeAuthor(author)">
+                {{author}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input placeholder="New author..." #authorInput [formControl]="authorCtrl" 
+                [matChipInputFor]="authorList" [matChipInputSeparatorKeyCodes]="separatorKeysCodesAuthor"
+                (matChipInputTokenEnd)="addAuthor($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedAuthor($event)">
+              <mat-option *ngFor="let author of filteredAuthor | async" [value]="author">
+                {{author}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>

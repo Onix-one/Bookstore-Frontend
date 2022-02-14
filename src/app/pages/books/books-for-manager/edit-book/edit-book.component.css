@@ -33,3 +33,22 @@
   .button-submit button {
     font-size: 150%;
   }
+  .AddBook{
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.25rem !important;
+
+  }
+  .AddBook:hover{
+    border: 2px solid #050505 !important;
+    border-radius: 0.25rem !important;
+  }
+  .AddImage{
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.25rem !important;
+
+  }
+  .AddImage:hover{
+    border: 2px solid #050505 !important;
+    border-radius: 0.25rem !important;
+  }
+ 

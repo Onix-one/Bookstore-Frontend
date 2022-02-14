@@ -38,7 +38,8 @@ export interface AuthorDTO {
 export interface AuthorNamesAndIdInfo {
   /** @format int32 */
   id?: number;
-  fullName?: string | null;
+  firstName?: string | null;
+  secondName?: string | null;
 }
 
 export type AuthorsForGenreFiltr = object;
@@ -150,7 +151,6 @@ export interface CreateNewAuthorModel {
   dateOfBirth?: string | null;
   biografy: string;
   nationality: string;
-  genresOfBookId: number[];
 }
 
 export interface CreateNewBookModel {
@@ -214,6 +214,12 @@ export interface GenreOfBookForAuthorFiltr {
 
   /** @format int32 */
   id?: number;
+}
+
+export interface GenreOfBookNamesAndIdInfo {
+  /** @format int32 */
+  id?: number;
+  name?: string | null;
 }
 
 export interface GetAllGenreModel {
@@ -486,14 +492,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags Author
      * @name AuthorDeleteAuthorDelete
-     * @request DELETE:/api/Author/DeleteAuthor
+     * @request DELETE:/api/Author/DeleteAuthor/{authorId}
      * @secure
      */
-    authorDeleteAuthorDelete: (query?: { authorId?: number }, params: RequestParams = {}) =>
+    authorDeleteAuthorDelete: (authorId: number, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/Author/DeleteAuthor`,
+        path: `/api/Author/DeleteAuthor/${authorId}`,
         method: "DELETE",
-        query: query,
         secure: true,
         ...params,
       }),
@@ -510,6 +515,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<AuthorDTO, any>({
         path: `/api/Author/GetAllAuthors`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Author
+     * @name AuthorGetAllAuthorsByPartOfNameList
+     * @request GET:/api/Author/GetAllAuthorsByPartOfName
+     * @secure
+     */
+    authorGetAllAuthorsByPartOfNameList: (query?: { partOFName?: string }, params: RequestParams = {}) =>
+      this.request<AuthorNamesAndIdInfo[], any>({
+        path: `/api/Author/GetAllAuthorsByPartOfName`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -536,15 +559,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Author
-     * @name AuthorGetAuthorByIdList
-     * @request GET:/api/Author/GetAuthorById
+     * @name AuthorGetAuthorByIdDetail
+     * @request GET:/api/Author/GetAuthorById/{authorId}
      * @secure
      */
-    authorGetAuthorByIdList: (query?: { authorId?: number }, params: RequestParams = {}) =>
+    authorGetAuthorByIdDetail: (authorId: number, params: RequestParams = {}) =>
       this.request<AuthorDTO, any>({
-        path: `/api/Author/GetAuthorById`,
+        path: `/api/Author/GetAuthorById/${authorId}`,
         method: "GET",
-        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -713,14 +735,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags BookImage
      * @name BookImageDeleteImageDelete
-     * @request DELETE:/api/BookImage/DeleteImage
+     * @request DELETE:/api/BookImage/DeleteImage/{imageId}
      * @secure
      */
-    bookImageDeleteImageDelete: (query?: { imageId?: number }, params: RequestParams = {}) =>
+    bookImageDeleteImageDelete: (imageId: number, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/BookImage/DeleteImage`,
+        path: `/api/BookImage/DeleteImage/${imageId}`,
         method: "DELETE",
-        query: query,
         secure: true,
         ...params,
       }),
@@ -766,14 +787,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags GenreOfBook
      * @name GenreOfBookDeleteDelete
-     * @request DELETE:/api/GenreOfBook/Delete
+     * @request DELETE:/api/GenreOfBook/Delete/{genreId}
      * @secure
      */
-    genreOfBookDeleteDelete: (query?: { genreId?: number }, params: RequestParams = {}) =>
+    genreOfBookDeleteDelete: (genreId: number, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/GenreOfBook/Delete`,
+        path: `/api/GenreOfBook/Delete/${genreId}`,
         method: "DELETE",
-        query: query,
         secure: true,
         ...params,
       }),
@@ -799,15 +819,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags GenreOfBook
-     * @name GenreOfBookGetGenreOfBookByIdList
-     * @request GET:/api/GenreOfBook/GetGenreOfBookById
+     * @name GenreOfBookGetGenreOfBookByIdDetail
+     * @request GET:/api/GenreOfBook/GetGenreOfBookById/{genreId}
      * @secure
      */
-    genreOfBookGetGenreOfBookByIdList: (query?: { genreId?: number }, params: RequestParams = {}) =>
+    genreOfBookGetGenreOfBookByIdDetail: (genreId: number, params: RequestParams = {}) =>
       this.request<AuthorDTO, any>({
-        path: `/api/GenreOfBook/GetGenreOfBookById`,
+        path: `/api/GenreOfBook/GetGenreOfBookById/${genreId}`,
         method: "GET",
-        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags GenreOfBook
+     * @name GenreOfBookGetAllGenresByPartOfNameDetail
+     * @request GET:/api/GenreOfBook/GetAllGenresByPartOfName/{partOfName}
+     * @secure
+     */
+    genreOfBookGetAllGenresByPartOfNameDetail: (partOfName: string, params: RequestParams = {}) =>
+      this.request<GenreOfBookNamesAndIdInfo, any>({
+        path: `/api/GenreOfBook/GetAllGenresByPartOfName/${partOfName}`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,
