@@ -97,7 +97,7 @@
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
-              <input placeholder="New author..." #authorInput [formControl]="authorCtrl" 
+              <input placeholder="New author..." #authorInput [formControl]="authorCtrl" [matAutocomplete]="auto" 
                 [matChipInputFor]="authorList" [matChipInputSeparatorKeyCodes]="separatorKeysCodesAuthor"
                 (matChipInputTokenEnd)="addAuthor($event)">
             </mat-chip-list>

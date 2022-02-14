@@ -45,7 +45,7 @@ export class EditBookComponent implements OnInit {
     this.filteredAuthor = this.authorCtrl.valueChanges.pipe(
       startWith(null),
       map((author: string | null) => (author ? this._filterAuthor(author) : this.allAuthors.slice())),
-    );
+    ).pipe((data)=> data as Observable<string[]> );
   }
 
 
@@ -118,32 +118,41 @@ export class EditBookComponent implements OnInit {
   }
 
   myVar!: NodeJS.Timeout;
-  private _filterAuthor(value: string): string[] {
+  private async _filterAuthor(value: string): Promise<string[]> {
 
     myStopFunction(this.myVar);
 
     if (value.length > 2) {
-      let result  =  myFunction(this.api!,value)
-      delay(10000);
+      let result =await myFunction(this.api!, value);
+      
+
+      console.log("results");
+      console.log(result[0]);
+      console.log(result[1]);
+      
       this.myVar = result[0];
 
-      var authorsNames =  result[1].map(x=>x.secondName!);
-      return authorsNames;
+      var authorsNames = await result[1].map(x => x.secondName!);
+
+      console.log(authorsNames[0]);
+      return  authorsNames;
     }
     return [];
-    function myFunction(api:Api<unknown>,value:string):[NodeJS.Timeout,AuthorNamesAndIdInfo[]] {
-      var authors! :AuthorNamesAndIdInfo[];
-      let timeout = setTimeout(function () {
-       api.api.authorGetAllAuthorsByPartOfNameList({partOFName : value}).then(data=>
+    async function myFunction(api: Api<unknown>, value: string): Promise<[NodeJS.Timeout, AuthorNamesAndIdInfo[]]> {
+      var authors!: AuthorNamesAndIdInfo[];
+      let timeout =setTimeout(async function () {
+        await api.api.authorGetAllAuthorsByPartOfNameList({ partOFName: value }).then((data) => {
+          authors = data.data;
+        });
+        console.log("alex cool");
         
-        authors  = data.data);
-        debugger
       }, 3000);
-      return [timeout,authors];
+
+      return [timeout, authors];
     }
-    function myStopFunction(myVar:NodeJS.Timeout) {
+    function myStopFunction(myVar: NodeJS.Timeout) {
       clearTimeout(myVar);
-    }  
+    }
 
     const filterValue = value.toLowerCase();
     return this.allAuthors.filter(author => author.toLowerCase().includes(filterValue));
@@ -174,3 +183,22 @@ export class EditBookComponent implements OnInit {
     this.imageFiles.removeAt(index);
   }
 }
+// this.api.api.accountLoginCreate(this.loginForm.value).then(
+//   (data) => {
+//     debugger
+//     TokenService.saveToken(
+//       data.data.accessToken ? data.data.accessToken : 'default'
+//     );
+//     // TokenService.saveRefreshToken(data.refreshToken); // TODO add reresh user in backend
+//     TokenService.saveUser(data);
+//     this.isLoginFailed = false;
+//     this.isLoggedIn = true;
+//     this.roles = TokenService.getUser().roles;
+//     this.appComponent.isAuthenticated = true;
+//     this.router.navigate(['/Dashboard']);
+//   },
+//   (err) => {
+//     this.errorMessage = err.error.message;
+//     this.isLoginFailed = true;
+//   }
+// );
