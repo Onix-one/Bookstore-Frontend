@@ -27,15 +27,20 @@ export class EditBookComponent implements OnInit {
   authorCtrl = new FormControl();
   filteredGenres: Observable<string[]>;
   filteredAuthor: Observable<string[]>;
+  filteredAuthor2!: string[];
   genres: string[] = [];
   authors: string[] = [];
-  allGenres: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', 'qqqqqqqqqqq', 'wwwwwwwwwwwwwwwww', 'eeeeeeeeeeee', 'rrrrrrrr', 'aaaaaa'];
+  allGenres: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', '111', '11122', 'eeeeeeeeeeee', 'rrrrrrrr', 'aaaaaa'];
+
+  allAuth: string[] = ['11111111', '22221111', '22223333', '22224444', '55555555'];
+
   allAuthors: string[] = [];
 
   @ViewChild('genreInput') genreInput?: ElementRef<HTMLInputElement>;
   @ViewChild('authorInput') authorInput?: ElementRef<HTMLInputElement>;
 
   constructor(private apiService: ApiService) {
+    this.filteredAuthor2 = []
     this.api = apiService.GetApi();
 
     this.filteredGenres = this.genreCtrl.valueChanges.pipe(
@@ -44,8 +49,8 @@ export class EditBookComponent implements OnInit {
     );
     this.filteredAuthor = this.authorCtrl.valueChanges.pipe(
       startWith(null),
-      map((author: string | null) => (author ? this._filterAuthor(author) : this.allAuthors.slice())),
-    ).pipe((data)=> data as Observable<string[]> );
+      map((author: string | null) => (author ? this._filterAuthor(author) : this.allAuth.slice())),
+    );
   }
 
 
@@ -118,45 +123,96 @@ export class EditBookComponent implements OnInit {
   }
 
   myVar!: NodeJS.Timeout;
-  private async _filterAuthor(value: string): Promise<string[]> {
 
-    myStopFunction(this.myVar);
+  read(value: string) {
+    const filterValue = value.toLowerCase();
+    this.myStopFunction(this.myVar)
 
     if (value.length > 2) {
-      let result =await myFunction(this.api!, value);
-      
+      this.myVar = setTimeout(() => {
 
-      console.log("results");
-      console.log(result[0]);
-      console.log(result[1]);
-      
-      this.myVar = result[0];
-
-      var authorsNames = await result[1].map(x => x.secondName!);
-
-      console.log(authorsNames[0]);
-      return  authorsNames;
-    }
-    return [];
-    async function myFunction(api: Api<unknown>, value: string): Promise<[NodeJS.Timeout, AuthorNamesAndIdInfo[]]> {
-      var authors!: AuthorNamesAndIdInfo[];
-      let timeout =setTimeout(async function () {
-        await api.api.authorGetAllAuthorsByPartOfNameList({ partOFName: value }).then((data) => {
-          authors = data.data;
+        this.api!.api.authorGetAllAuthorsByPartOfNameList({ partOFName: value }).then((data) => {
+          let tem = data.data.values();
+          console.log(Array.from(tem));
+          debugger
         });
-        console.log("alex cool");
-        
-      }, 3000);
+       /*  
+        this.filteredAuthor2 = this.allAuth.filter(genre => genre.toLowerCase().includes(filterValue));
+        console.log(this.filteredAuthor2); */
+      }, 2000);
+    }
 
-      return [timeout, authors];
-    }
-    function myStopFunction(myVar: NodeJS.Timeout) {
-      clearTimeout(myVar);
-    }
+  }
+
+
+
+
+  private _filterAuthor(value: string): string[] {
 
     const filterValue = value.toLowerCase();
-    return this.allAuthors.filter(author => author.toLowerCase().includes(filterValue));
+    this.myStopFunction(this.myVar)
+    var authorsNames: string[] = [];
+
+    if (value.length > 2) {
+      this.myVar = setTimeout(() => {
+        authorsNames = this.allAuth.filter(genre => genre.toLowerCase().includes(filterValue));
+        console.log(authorsNames);
+        debugger
+        return authorsNames;
+      }, 1000);
+    }
+    console.log(authorsNames);
+    return [];
+
+
+    /* this.myStopFunction(this.myVar);
+    var authorsNames: string[] = [];
+
+    if (value.length > 2) {
+
+      this.myVar = setTimeout(() => {
+          this.api!.api.authorGetAllAuthorsByPartOfNameList({ partOFName: value }).then((data) => {
+  
+            authors = data.data;
+  
+            console.log(authors);
+  
+            debugger
+          });
+          return authorsNames;
+        const filterValue = value.toLowerCase();
+        authorsNames = this.allAuth.filter(genre => genre.toLowerCase().includes(filterValue));
+        console.log(authorsNames);
+
+        return authorsNames;
+      }, 1000);
+    }
+    
+    console.log(authorsNames);
+    return []; */
   }
+ 
+
+
+  myFunction(myVar: NodeJS.Timeout, api: Api<unknown>, value: string): AuthorNamesAndIdInfo[] {
+    var authors!: AuthorNamesAndIdInfo[];
+
+    myVar = setTimeout(function () {
+      api.api.authorGetAllAuthorsByPartOfNameList({ partOFName: value }).then((data) => {
+        authors = data.data;
+
+      });
+
+    }, 3000);
+
+    return authors;
+  }
+
+
+  myStopFunction(myVar: NodeJS.Timeout) {
+    clearTimeout(myVar);
+  }
+
 
   ngOnInit(): void {
     this.imageFiles = new FormArray([])

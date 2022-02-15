@@ -231,7 +231,7 @@ export class Client {
      * @param partOFName (optional) 
      * @return Success
      */
-    getAllAuthorsByPartOfName(partOFName: string | undefined , cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo[]> {
+    getAllAuthorsByPartOfName(partOFName: string | undefined , cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo> {
         let url_ = this.baseUrl + "/api/Author/GetAllAuthorsByPartOfName?";
         if (partOFName === null)
             throw new Error("The parameter 'partOFName' cannot be null.");
@@ -259,7 +259,7 @@ export class Client {
         });
     }
 
-    protected processGetAllAuthorsByPartOfName(response: AxiosResponse): Promise<AuthorNamesAndIdInfo[]> {
+    protected processGetAllAuthorsByPartOfName(response: AxiosResponse): Promise<AuthorNamesAndIdInfo> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -273,21 +273,14 @@ export class Client {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(AuthorNamesAndIdInfo.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return Promise.resolve<AuthorNamesAndIdInfo[]>(result200);
+            result200 = AuthorNamesAndIdInfo.fromJS(resultData200);
+            return Promise.resolve<AuthorNamesAndIdInfo>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<AuthorNamesAndIdInfo[]>(<any>null);
+        return Promise.resolve<AuthorNamesAndIdInfo>(<any>null);
     }
 
     /**

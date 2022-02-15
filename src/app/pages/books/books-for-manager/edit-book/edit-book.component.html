@@ -97,12 +97,12 @@
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
-              <input placeholder="New author..." #authorInput [formControl]="authorCtrl" [matAutocomplete]="auto" 
+              <input placeholder="New author..." #input (input)="read(input.value)"  #authorInput [formControl]="authorCtrl" [matAutocomplete]="auto1" 
                 [matChipInputFor]="authorList" [matChipInputSeparatorKeyCodes]="separatorKeysCodesAuthor"
                 (matChipInputTokenEnd)="addAuthor($event)">
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedAuthor($event)">
-              <mat-option *ngFor="let author of filteredAuthor | async" [value]="author">
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectedAuthor($event)">
+              <mat-option *ngFor="let author of filteredAuthor2" [value]="author">
                 {{author}}
               </mat-option>
             </mat-autocomplete>
