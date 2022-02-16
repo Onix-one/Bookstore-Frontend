@@ -1105,7 +1105,7 @@ export class ClientApi {
     /**
      * @return Success
      */
-    getAllGenres(  cancelToken?: CancelToken | undefined): Promise<GetAllGenreModel> {
+    getAllGenres(  cancelToken?: CancelToken | undefined): Promise<GetAllGenreModel[]> {
         let url_ = this.baseUrl + "/api/GenreOfBook/GetAllGenres";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1129,7 +1129,7 @@ export class ClientApi {
         });
     }
 
-    protected processGetAllGenres(response: AxiosResponse): Promise<GetAllGenreModel> {
+    protected processGetAllGenres(response: AxiosResponse): Promise<GetAllGenreModel[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1143,14 +1143,21 @@ export class ClientApi {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = GetAllGenreModel.fromJS(resultData200);
-            return Promise.resolve<GetAllGenreModel>(result200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GetAllGenreModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<GetAllGenreModel[]>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<GetAllGenreModel>(<any>null);
+        return Promise.resolve<GetAllGenreModel[]>(<any>null);
     }
 
     /**

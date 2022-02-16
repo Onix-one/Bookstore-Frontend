@@ -8,7 +8,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { delay, map, startWith } from 'rxjs/operators';
 import { query } from '@angular/animations';
 import { ClientFactoryService } from '../../../../shared/services/clientfactory.service';
-import { ClientApi } from '../../../../generated/MainClient/ApiClient';
+import { AuthorNamesAndIdInfo, ClientApi, CreateNewBookModel, GetAllGenreModel } from '../../../../generated/MainClient/ApiClient';
 
 @Component({
   selector: 'app-edit-book',
@@ -26,14 +26,15 @@ export class EditBookComponent implements OnInit {
   genreCtrl = new FormControl();
   authorCtrl = new FormControl();
   filteredGenres: Observable<string[]>;
-  filteredAuthor: Observable<string[]>;
+  // filteredAuthor: Observable<string[]>;
   filteredAuthor2!: string[];
   genres: string[] = [];
   authors: string[] = [];
-  allGenres: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', '111', '11122', 'eeeeeeeeeeee', 'rrrrrrrr', 'aaaaaa'];
+  allGenres: string[] = [];
+  allGenreModel: GetAllGenreModel[] = [];
+  allAuthorModels: AuthorNamesAndIdInfo[] = [];
 
   allAuth: string[] = [];
-
   allAuthors: string[] = [];
 
   @ViewChild('genreInput') genreInput?: ElementRef<HTMLInputElement>;
@@ -47,16 +48,13 @@ export class EditBookComponent implements OnInit {
       startWith(null),
       map((genre: string | null) => (genre ? this._filterGenre(genre) : this.allGenres.slice())),
     );
-    this.filteredAuthor = this.authorCtrl.valueChanges.pipe(
-      startWith(null),
-      map((author: string | null) => (author ? this._filterAuthor(author) : this.allAuth.slice())),
-    );
+    // this.filteredAuthor = this.authorCtrl.valueChanges.pipe(
+    //   startWith(null),
+    //   map((author: string | null) => (author ? this._filterAuthor(author) : this.allAuth.slice())),
+    // );
   }
 
-
-
   addGenre(event: MatChipInputEvent): void {
-    debugger
     const value = (event.value || '').trim();
 
     // Add our fruit
@@ -85,7 +83,6 @@ export class EditBookComponent implements OnInit {
   }
 
   removeGenre(genre: string): void {
-    debugger
     const index = this.genres.indexOf(genre);
 
     if (index >= 0) {
@@ -132,6 +129,7 @@ export class EditBookComponent implements OnInit {
       this.myVar = setTimeout(() => {
 
         this.clientApi.getAllAuthorsByPartOfName(value).then((data) => {
+          this.allAuthorModels = data;
           this.filteredAuthor2 = data.map(x => x.secondName!);
         });
       }, 2000);
@@ -139,43 +137,54 @@ export class EditBookComponent implements OnInit {
 
   }
 
-  private _filterAuthor(value: string): string[] {
+  // private _filterAuthor(value: string): string[] {
 
-    const filterValue = value.toLowerCase();
-    this.myStopFunction(this.myVar)
-    var authorsNames: string[] = [];
+  //   const filterValue = value.toLowerCase();
+  //   this.myStopFunction(this.myVar)
+  //   var authorsNames: string[] = [];
 
-    if (value.length > 2) {
-      this.myVar = setTimeout(() => {
-        authorsNames = this.allAuth.filter(genre => genre.toLowerCase().includes(filterValue));
-        console.log(authorsNames);
-        debugger
-        return authorsNames;
-      }, 1000);
-    }
-    console.log(authorsNames);
-    return [];
-  }
+  //   if (value.length > 2) {
+  //     this.myVar = setTimeout(() => {
+  //       authorsNames = this.allAuth.filter(genre => genre.toLowerCase().includes(filterValue));
+  //       console.log(authorsNames);
+  //       debugger
+  //       return authorsNames;
+  //     }, 1000);
+  //   }
+  //   console.log(authorsNames);
+  //   return [];
+  // }
 
   myStopFunction(myVar: NodeJS.Timeout) {
     clearTimeout(myVar);
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.clientApi.getAllGenres().then((data) => {
+      this.allGenreModel = data;
+      this.allGenres = data.map(x => x.name!);
+    });
+
     this.imageFiles = new FormArray([])
     this.createBook = new FormGroup({
       name: new FormControl(''),
       price: new FormControl(''),
       description: new FormControl(''),
       imageFiles: this.imageFiles,
-      book: new FormControl(''),
-      genresOfBookId: new FormControl(''),
-      authorsId: new FormControl('')
+      book: new FormControl('')
+      // genresOfBookId : this.genreCtrl,
+      // authorsId: this.authorCtrl
     });
   }
 
-  submit(form:any) {
-    console.log(form);
+  submit(form: CreateNewBookModel) {
+    debugger
+    if (this.createBook.valid) {
+      form.authorsId = this.allAuthorModels.filter(x => this.authors.includes(x.secondName!)).map(x => x.id!);
+      form.genresOfBookId = this.allGenreModel.filter(x => this.genres.includes(x.name!)).map(x => x.id!);
+      console.log(form);
+      this.clientApi.bookPOST(form).then((err) => console.log(err));
+    }
   }
 
   addImage() {

@@ -11,7 +11,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input type="text" matInput required maxlength="100" minlength="1" placeholder="book name"
-              formControlName="name">
+            formControlName="name">
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['name'].valid && createBook.controls['name'].dirty">
             Bookname is required
@@ -32,7 +32,7 @@
         <div class="book-description">
           <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
-            <textarea matInput required minlength="50" placeholder="Book description"
+            <textarea matInput type="text"   minlength="50" placeholder="Book description"
               formControlName="description"></textarea>
           </mat-form-field>
           <mat-error *ngIf="!createBook.controls['description'].valid && createBook.controls['description'].dirty">
@@ -50,7 +50,7 @@
           <div class="row col-12 book-image pb-3" formArrayName="imageFiles"
             *ngFor="let imageFile of imageFiles.controls;let i=index">
             <div class="col-9">
-              <input type="file" required multiple requiredFileType="image/png" [formControlName]="i">
+              <input type="file"  multiple requiredFileType="image/png" [formControlName]="i">
             </div>
             <div class="col-3">
               <mat-icon (click)="removeImage(i)">remove_circle_outline</mat-icon>
@@ -62,7 +62,7 @@
             <div class="fonk" >Add Book</div>
           </div> 
           <div class="book-book pb-3 ps-2">
-            <input class="ml-1" type="file" required formControlName="book">
+            <input class="ml-1" type="file"  formControlName="book">
           </div>
         </div>
         <div class="book-genres">
