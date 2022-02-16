@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Api, CreateNewAuthorModel } from 'src/app/generated/bookStore-api';
-import { ApiService } from 'src/app/shared/services/api.service';
+import { ClientApi } from 'src/app/generated/MainClient/ApiClient';
+import { ClientFactoryService } from 'src/app/shared/services/clientfactory.service';
 
 @Component({
   selector: 'app-form-add-author',
@@ -11,11 +11,10 @@ import { ApiService } from 'src/app/shared/services/api.service';
 export class FormAddAuthorComponent implements OnInit {
 
   createAuthor!: FormGroup;
-  api?:Api<unknown>;
+  clientApi!: ClientApi;
 
-
-  constructor(private apiService: ApiService) {
-    this.api = apiService.GetApi();
+  constructor(private clientFactory: ClientFactoryService) {
+    this.clientApi = clientFactory.getClientApi();
   }
 
   ngOnInit(): void {
@@ -27,7 +26,7 @@ export class FormAddAuthorComponent implements OnInit {
       nationality: new FormControl(''),
     })
   }
-  submit(form:CreateNewAuthorModel) {
-    this.api?.api.authorCreateAuthorCreate(form);
+  submit(form:any) {
+    this.clientApi.createAuthor(form);
   }
 }

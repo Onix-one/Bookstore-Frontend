@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Api, CreateNewGenreOfBookModel } from 'src/app/generated/bookStore-api';
-import { ApiService } from 'src/app/shared/services/api.service';
+import { ClientApi } from 'src/app/generated/MainClient/ApiClient';
+import { ClientFactoryService } from '../../../shared/services/clientfactory.service';
 
 @Component({
   selector: 'app-form-add-genre',
@@ -10,11 +10,10 @@ import { ApiService } from 'src/app/shared/services/api.service';
 })
 export class FormAddGenreComponent implements OnInit {
   createGenre!: FormGroup;
-  api?:Api<unknown>;
+  clientApi! : ClientApi;
 
-
-  constructor(private apiService: ApiService) {
-    this.api = apiService.GetApi();
+  constructor(private clientFactory:ClientFactoryService) {
+    this.clientApi = clientFactory.getClientApi();
   }
 
   ngOnInit(): void {
@@ -23,8 +22,7 @@ export class FormAddGenreComponent implements OnInit {
       description: new FormControl('')
     })
   }
-  submit(form:CreateNewGenreOfBookModel) {
-
-    this.api?.api.genreOfBookCreateCreate(form);
+  submit(form:any) {
+    this.clientApi.createGenre(form);
   }
 }

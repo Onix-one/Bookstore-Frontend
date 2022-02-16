@@ -22,12 +22,11 @@ import { AuthorFilterComponent } from './pages/books/books-for-customer/filter/a
 import { FilterComponent } from './pages/books/books-for-customer/filter/filter.component';
 import { EditBookComponent } from './pages/books/books-for-manager/edit-book/edit-book.component';
 /* import { NgxMatSelectSearchModule } from 'ngx-mat-select-search'; */
-import { Api } from './generated/bookStore-api';
-import { ApiService } from './shared/services/api.service';
 import { GenresComponent } from './pages/genres/genres.component';
 import { FormAddGenreComponent } from './pages/genres/form-add-genre/form-add-genre.component';
 import { AuthorsComponent } from './pages/authors/authors.component';
 import { FormAddAuthorComponent } from './pages/authors/form-add-author/form-add-author.component';
+import { ClientFactoryService } from './shared/services/clientfactory.service';
 
 
 
@@ -63,7 +62,7 @@ import { FormAddAuthorComponent } from './pages/authors/form-add-author/form-add
     HomeModule/* ,
     NgxMatSelectSearchModule */
   ],
-  providers: [Api,ApiService],
+  providers: [ClientFactoryService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

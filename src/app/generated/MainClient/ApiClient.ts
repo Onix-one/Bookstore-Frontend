@@ -9,7 +9,7 @@
 
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
-export class Client {
+export class ClientApi {
     private instance: AxiosInstance;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -231,7 +231,7 @@ export class Client {
      * @param partOFName (optional) 
      * @return Success
      */
-    getAllAuthorsByPartOfName(partOFName: string | undefined , cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo> {
+    getAllAuthorsByPartOfName(partOFName: string | undefined , cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo[]> {
         let url_ = this.baseUrl + "/api/Author/GetAllAuthorsByPartOfName?";
         if (partOFName === null)
             throw new Error("The parameter 'partOFName' cannot be null.");
@@ -259,7 +259,7 @@ export class Client {
         });
     }
 
-    protected processGetAllAuthorsByPartOfName(response: AxiosResponse): Promise<AuthorNamesAndIdInfo> {
+    protected processGetAllAuthorsByPartOfName(response: AxiosResponse): Promise<AuthorNamesAndIdInfo[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -273,20 +273,27 @@ export class Client {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = AuthorNamesAndIdInfo.fromJS(resultData200);
-            return Promise.resolve<AuthorNamesAndIdInfo>(result200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AuthorNamesAndIdInfo.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<AuthorNamesAndIdInfo[]>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<AuthorNamesAndIdInfo>(<any>null);
+        return Promise.resolve<AuthorNamesAndIdInfo[]>(<any>null);
     }
 
     /**
      * @return Success
      */
-    getAllAuthorsNameAndId(  cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo> {
+    getAllAuthorsNameAndId(  cancelToken?: CancelToken | undefined): Promise<AuthorNamesAndIdInfo[]> {
         let url_ = this.baseUrl + "/api/Author/GetAllAuthorsNameAndId";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -310,7 +317,7 @@ export class Client {
         });
     }
 
-    protected processGetAllAuthorsNameAndId(response: AxiosResponse): Promise<AuthorNamesAndIdInfo> {
+    protected processGetAllAuthorsNameAndId(response: AxiosResponse): Promise<AuthorNamesAndIdInfo[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -324,14 +331,21 @@ export class Client {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = AuthorNamesAndIdInfo.fromJS(resultData200);
-            return Promise.resolve<AuthorNamesAndIdInfo>(result200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AuthorNamesAndIdInfo.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<AuthorNamesAndIdInfo[]>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<AuthorNamesAndIdInfo>(<any>null);
+        return Promise.resolve<AuthorNamesAndIdInfo[]>(<any>null);
     }
 
     /**
@@ -833,16 +847,11 @@ export class Client {
     }
 
     /**
-     * @param bookId (optional) 
      * @param body (optional) 
      * @return Success
      */
-    addImageToBook(bookId: number | undefined, body: FileParameter[] | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/BookImage/AddImageToBook?";
-        if (bookId === null)
-            throw new Error("The parameter 'bookId' cannot be null.");
-        else if (bookId !== undefined)
-            url_ += "bookId=" + encodeURIComponent("" + bookId) + "&";
+    addImageToBook(body: AddImageModel | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/BookImage/AddImageToBook";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -943,8 +952,8 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    create(body: CreateNewGenreOfBookModel | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/GenreOfBook/Create";
+    createGenre(body: CreateNewGenreOfBookModel | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/GenreOfBook/CreateGenre";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -966,11 +975,11 @@ export class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreate(_response);
+            return this.processCreateGenre(_response);
         });
     }
 
-    protected processCreate(response: AxiosResponse): Promise<void> {
+    protected processCreateGenre(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -995,15 +1004,15 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    edit(body: GenreOfBookDTO | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/GenreOfBook/Edit";
+    editGenre(body: GenreOfBookDTO | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/GenreOfBook/EditGenre";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
-            method: "POST",
+            method: "PUT",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
@@ -1018,11 +1027,11 @@ export class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processEdit(_response);
+            return this.processEditGenre(_response);
         });
     }
 
-    protected processEdit(response: AxiosResponse): Promise<void> {
+    protected processEditGenre(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1046,8 +1055,8 @@ export class Client {
     /**
      * @return Success
      */
-    delete(genreId: number , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/GenreOfBook/Delete/{genreId}";
+    deleteGenre(genreId: number , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/GenreOfBook/DeleteGenre/{genreId}";
         if (genreId === undefined || genreId === null)
             throw new Error("The parameter 'genreId' must be defined.");
         url_ = url_.replace("{genreId}", encodeURIComponent("" + genreId));
@@ -1068,11 +1077,11 @@ export class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processDelete(_response);
+            return this.processDeleteGenre(_response);
         });
     }
 
-    protected processDelete(response: AxiosResponse): Promise<void> {
+    protected processDeleteGenre(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1096,8 +1105,8 @@ export class Client {
     /**
      * @return Success
      */
-    getAll(  cancelToken?: CancelToken | undefined): Promise<GetAllGenreModel> {
-        let url_ = this.baseUrl + "/api/GenreOfBook/GetAll";
+    getAllGenres(  cancelToken?: CancelToken | undefined): Promise<GetAllGenreModel> {
+        let url_ = this.baseUrl + "/api/GenreOfBook/GetAllGenres";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -1116,11 +1125,11 @@ export class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processGetAll(_response);
+            return this.processGetAllGenres(_response);
         });
     }
 
-    protected processGetAll(response: AxiosResponse): Promise<GetAllGenreModel> {
+    protected processGetAllGenres(response: AxiosResponse): Promise<GetAllGenreModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1251,6 +1260,54 @@ export class Client {
         }
         return Promise.resolve<GenreOfBookNamesAndIdInfo>(<any>null);
     }
+}
+
+export class AddImageModel implements IAddImageModel {
+    images?: string[] | undefined;
+    bookId?: number;
+
+    constructor(data?: IAddImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images!.push(item);
+            }
+            this.bookId = _data["bookId"];
+        }
+    }
+
+    static fromJS(data: any): AddImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item);
+        }
+        data["bookId"] = this.bookId;
+        return data;
+    }
+}
+
+export interface IAddImageModel {
+    images?: string[] | undefined;
+    bookId?: number;
 }
 
 export class Author implements IAuthor {
@@ -2651,8 +2708,8 @@ export interface IGetMaxAndMinPriceInfo {
     maxPrice?: number;
 }
 
-export class BestClass extends Error {
-    message: string;
+export class ApiException extends Error {
+    override message: string;
     status: number;
     response: string;
     headers: { [key: string]: any; };
@@ -2668,10 +2725,10 @@ export class BestClass extends Error {
         this.result = result;
     }
 
-    protected isBestClass = true;
+    protected isApiException = true;
 
-    static isBestClass(obj: any): obj is BestClass {
-        return obj.isBestClass === true;
+    static isApiException(obj: any): obj is ApiException {
+        return obj.isApiException === true;
     }
 }
 
@@ -2679,7 +2736,7 @@ function throwException(message: string, status: number, response: string, heade
     if (result !== null && result !== undefined)
         throw result;
     else
-        throw new BestClass(message, status, response, headers, null);
+        throw new ApiException(message, status, response, headers, null);
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {

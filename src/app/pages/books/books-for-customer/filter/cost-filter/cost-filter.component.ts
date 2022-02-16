@@ -1,8 +1,7 @@
-import { HttpClient } from 'src/app/generated/bookStore-api';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Api } from 'src/app/generated/bookStore-api';
-import { ApiService } from 'src/app/shared/services/api.service';
+import { ClientApi } from 'src/app/generated/MainClient/ApiClient';
+import { ClientFactoryService } from '../../../../../shared/services/clientfactory.service';
 
 
 @Component({
@@ -11,16 +10,16 @@ import { ApiService } from 'src/app/shared/services/api.service';
   styleUrls: ['./cost-filter.component.css']
 })
 export class CostFilterComponent implements OnInit {
+  clientApi!: ClientApi;
 
-  constructor(private apiService : ApiService) {
+  constructor(private clientFactory: ClientFactoryService) {
+    this.clientApi = clientFactory.getClientApi();
   }
   minCost: number = 0;
   maxCost: number = 0;
 
   async ngOnInit(): Promise<void> {
-    var api = this.apiService.GetApi();
-    // this.api.baseUrl = "https://localhost:44300";
-    const { data } = await api.api.bookMinmaxPriceCreate();
+    var data = await this.clientApi.minmaxPrice();
   
     this.minCost = data.minPrice ?? 0;
     this.maxCost = data.maxPrice ?? 0;

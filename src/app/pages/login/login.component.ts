@@ -2,6 +2,9 @@ import { Input, Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { ClientIdentityApi } from '../../generated/MainClient/IdentityApiClient';
+import { ClientFactoryService } from '../../shared/services/clientfactory.service';
+import { TokenService } from '../../shared/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +13,15 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  constructor(private router: Router) {}
+  clientIdentityApi!:ClientIdentityApi;
+
+  constructor(private router: Router,
+    private clientFactory: ClientFactoryService,
+    private appComponent: AppComponent
+    ) {
+    this.clientIdentityApi = clientFactory.getClientIdentityApi();
+  }
+  
 
   hide: boolean = true;
   isLoggedIn = false;
@@ -28,27 +39,27 @@ export class LoginComponent implements OnInit {
   readonly loginUrl = 'api/Account/Login';
 
   submit() {
-    // if (!this.loginForm.valid) {
-    //   return;
-    // }
-    // this.client.login(this.loginForm.value).then(
-    //   (data) => {
-    //     this.tokenStorage.saveToken(
-    //       data.accessToken ? data.accessToken : 'default'
-    //     );
-    //     // this.tokenStorage.saveRefreshToken(data.refreshToken); // TODO add reresh user in backend
-    //     this.tokenStorage.saveUser(data);
-    //     this.isLoginFailed = false;
-    //     this.isLoggedIn = true;
-    //     this.roles = this.tokenStorage.getUser().roles;
-    //     this.appComponent.isAuthenticated = true;
-    //     this.router.navigate(['/Dashboard']);
-    //   },
-    //   (err) => {
-    //     this.errorMessage = err.error.message;
-    //     this.isLoginFailed = true;
-    //   }
-    // );
+    if (!this.loginForm.valid) {
+      return;
+    }
+    this.clientIdentityApi.login(this.loginForm.value).then(
+      (data) => {
+        TokenService.saveToken(
+          data.accessToken ? data.accessToken : 'default'
+        );
+        // TokenService.saveRefreshToken(data.refreshToken); // TODO add reresh user in backend
+        TokenService.saveUser(data);
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.roles = TokenService.getUser().roles;
+        this.appComponent.isAuthenticated = true;
+        this.router.navigate(['/Dashboard']);
+      },
+      (err) => {
+        this.errorMessage = err.error.message;
+        this.isLoginFailed = true;
+      }
+    );
   }
 
   reloadPage() {
