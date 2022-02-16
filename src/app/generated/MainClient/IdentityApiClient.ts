@@ -1092,16 +1092,16 @@ export interface ICreateUserDto {
 }
 
 export class ApiException extends Error {
-    override message: string;
+    message1: string;
     status: number;
     response: string;
     headers: { [key: string]: any; };
     result: any;
 
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+    constructor(message1: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
 
-        this.message = message;
+        this.message1 = message1;
         this.status = status;
         this.response = response;
         this.headers = headers;
@@ -1115,11 +1115,11 @@ export class ApiException extends Error {
     }
 }
 
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+function throwException(message1: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
     if (result !== null && result !== undefined)
         throw result;
     else
-        throw new ApiException(message, status, response, headers, null);
+        throw new ApiException(message1, status, response, headers, null);
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {

@@ -159,21 +159,23 @@ export class EditBookComponent implements OnInit {
     clearTimeout(myVar);
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.clientApi.getAllGenres().then((data) => {
+  ngOnInit() {
+ 
+
+      this.imageFiles = new FormArray([])
+      this.createBook = new FormGroup({
+        name: new FormControl(''),
+        price: new FormControl(''),
+        description: new FormControl(''),
+        imageFiles: this.imageFiles,
+        book: new FormControl(''),
+      });
+
+   this.clientApi.getAllGenres().then((data) => {
       this.allGenreModel = data;
       this.allGenres = data.map(x => x.name!);
-    });
-
-    this.imageFiles = new FormArray([])
-    this.createBook = new FormGroup({
-      name: new FormControl(''),
-      price: new FormControl(''),
-      description: new FormControl(''),
-      imageFiles: this.imageFiles,
-      book: new FormControl('')
-      // genresOfBookId : this.genreCtrl,
-      // authorsId: this.authorCtrl
+      // genresOfBookId : new FormControl(''),
+      // authorsId: new FormControl('')
     });
   }
 
