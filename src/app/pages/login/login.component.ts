@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         TokenService.saveToken(
           data.accessToken ? data.accessToken : 'default'
         );
-        // TokenService.saveRefreshToken(data.refreshToken); // TODO add reresh user in backend
+        TokenService.saveRefreshToken(data.refreshToken ? data.refreshToken : 'default'); 
         TokenService.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;

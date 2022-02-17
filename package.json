@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o &&replace-in-files --string='message' --regex='message this\\.meassage'  --replacement='message1' src/app/generated/MainClient/",
+    "start": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "genApi": "npx swagger-typescript-api -p http://localhost:1092/swagger/v1/swagger.json -o ./src/app/generated -n bookStore-api.ts",
-    "renameApi":"replace-in-files --string='message' --regex='message this\\.meassage'  --replacement='message1' src/app/generated/MainClient/"
+    "renameApi":"replace-in-files --string='message' --regex='message this\\.message'  --replacement='message1' src/app/generated/MainClient/"
   },
   "private": true,
   "dependencies": {

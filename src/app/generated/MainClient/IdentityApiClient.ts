@@ -286,22 +286,21 @@ export class ClientIdentityApi {
     }
 
     /**
-     * @param email (optional) 
-     * @param refreshToken (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    refreshToken(email: string | null | undefined, refreshToken: string | null | undefined , cancelToken?: CancelToken | undefined): Promise<LoginResultModel> {
-        let url_ = this.baseUrl + "/api/Account/RefreshToken?";
-        if (email !== undefined && email !== null)
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
-        if (refreshToken !== undefined && refreshToken !== null)
-            url_ += "refreshToken=" + encodeURIComponent("" + refreshToken) + "&";
+    refreshToken(body: RefreshTokenModel | undefined , cancelToken?: CancelToken | undefined): Promise<LoginResultModel> {
+        let url_ = this.baseUrl + "/api/Account/RefreshToken";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <AxiosRequestConfig>{
-            method: "GET",
+            data: content_,
+            method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -870,6 +869,7 @@ export interface ILoginUserInfoModel {
 export class LoginResultModel implements ILoginResultModel {
     user?: LoginUserInfoModel;
     readonly accessToken?: string | undefined;
+    readonly refreshToken?: string | undefined;
     readonly roles?: string[] | undefined;
 
     constructor(data?: ILoginResultModel) {
@@ -885,6 +885,7 @@ export class LoginResultModel implements ILoginResultModel {
         if (_data) {
             this.user = _data["user"] ? LoginUserInfoModel.fromJS(_data["user"]) : <any>undefined;
             (<any>this).accessToken = _data["accessToken"];
+            (<any>this).refreshToken = _data["refreshToken"];
             if (Array.isArray(_data["roles"])) {
                 (<any>this).roles = [] as any;
                 for (let item of _data["roles"])
@@ -904,6 +905,7 @@ export class LoginResultModel implements ILoginResultModel {
         data = typeof data === 'object' ? data : {};
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["accessToken"] = this.accessToken;
+        data["refreshToken"] = this.refreshToken;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -916,6 +918,7 @@ export class LoginResultModel implements ILoginResultModel {
 export interface ILoginResultModel {
     user?: LoginUserInfoModel;
     accessToken?: string | undefined;
+    refreshToken?: string | undefined;
     roles?: string[] | undefined;
 }
 
@@ -1025,6 +1028,46 @@ export interface IUserDto {
     userName?: string | undefined;
     phoneNumber?: string | undefined;
     role: string;
+}
+
+export class RefreshTokenModel implements IRefreshTokenModel {
+    email?: string | undefined;
+    refreshToken?: string | undefined;
+
+    constructor(data?: IRefreshTokenModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.refreshToken = _data["refreshToken"];
+        }
+    }
+
+    static fromJS(data: any): RefreshTokenModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RefreshTokenModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["refreshToken"] = this.refreshToken;
+        return data;
+    }
+}
+
+export interface IRefreshTokenModel {
+    email?: string | undefined;
+    refreshToken?: string | undefined;
 }
 
 export class CreateUserDto implements ICreateUserDto {
